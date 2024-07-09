@@ -173,22 +173,22 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                     continue;
                 }
 
-                // for line comments (double forward slashes)
+                // for line comments (--)
                 // the parsing is skipped until the end of a line 
-                // Remote the last lexem (TODO: check why I added this)
+                // Remove the last lexem
                 if (IsLineCommentStart(c))
                 {
-                    RemoveLastLexem();
+                    RemoveLastLexem(); // the last lexem was a - (subtraction), needs to be removed
                     SkipUntilEndOfLine();
                     continue;
                 }
 
                 // for a block comments (/* */), the parsing is skipped
                 // until the end of the block comment.
-                // Remote the last lexem (TODO: check why)
+                // Remove the last lexem
                 if (IsBlockCommentStart(c))
                 {
-                    RemoveLastLexem();
+                    RemoveLastLexem(); // the last lexem was a / (division),, needs to be removed
                     SkipUntilEndOfBlockComment();
                     continue;
                 }
@@ -223,20 +223,20 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
 
                 if (IsOperator(c))
                 {
-                    if (c == '.' && _buffer.Length > 0)
+                    // if the operator is a dot (.) and there were characters 
+                    // put in _buffer before, and this is an integer 
+                    // then it is a float - and should be combined.
+                    if (c == '.' && _buffer.Length > 0 && IsInteger(_buffer.ToString()))
                     {
-                        // special treatment for floats
-                        if (IsInteger(_buffer.ToString()))
-                        {
-                            _buffer.Append(c);
-                            continue;
-                        }
+                        _buffer.Append(c);
+                        continue;
                     }
                     
                     if (_pos < _input.Length)
                     {
                         char c2 = _input[_pos];
-                        if (IsOperator(c,c2))
+                        // consider 2 character-operators like "+=":
+                        if (IsTwoCharOperator(c,c2))
                         {
                             CompleteLexem();
                             _lexems.Add(new OperatorSymbol($"{c}{c2}"));
@@ -248,7 +248,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                             _lexems.Add(new OperatorSymbol(c.ToString()));
                         }
                     }
-                    else
+                    else // this else branch can happen only at the end of a script
                     {
                         CompleteLexem();
                         _lexems.Add(new OperatorSymbol(c.ToString()));
@@ -279,42 +279,27 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                     continue;
                 }
 
-                if (IsAlpha(c))
+                // if the character is a character (from alpha-bet) add it to the _buffer
+                // or if the character is a number
+                // if the character is an underscore at it to the _buffer
+                // or if the character is an at-symbol (@) at it to the _buffer.
+                // or if the character is a hash-symbol (#) or a dollar symbol ($) at it to the _buffer.
+                if (IsAlpha(c)        ||
+                    IsNumber(c)       ||
+                    IsUnderscore(c)   || 
+                    IsAtSymbol(c)     ||
+                    IsHashSymbol(c)   || 
+                    IsDollarSymbol(c) ||
+                    IsDoubleQuote(c)
+                )
                 {
                     _buffer.Append(c);
                     continue;
                 }
 
-                if (IsUnderbrace(c))
-                {
-                    _buffer.Append(c);
-                    continue;
-                }
-
-                if (IsAtSymbol(c))
-                {
-                    _buffer.Append(c);
-                    continue;
-                }
-
-                if (IsHashSymbol(c) || IsDollarSymbol(c))
-                {
-                    _buffer.Append(c);
-                    continue;
-                }
-
-                if (IsDoubleQuote(c))
-                {
-                    _buffer.Append(c);
-                    continue;
-                }
-
-                if (IsNumber(c))
-                {
-                    _buffer.Append(c);
-                    continue;
-                }
-
+                // if an LBracket appears and no bracket was open
+                // then the lexem so far is completex and the count of open brackets
+                // is increased by 1. 
                 if (IsLBracket(c))
                 {
                     if (_bracketCount == 0)
@@ -334,6 +319,8 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
 
                 if (IsColon(c))
                 {
+                    // if there were 2 colons consecutively, then this is a scope separator
+                    // operator (::), otherwise a label.
                     if (_pos >= 2 && IsColon(_input[_pos - 2]))
                     {
                         _buffer.Remove(_buffer.Length - 1, 1);
@@ -368,6 +355,10 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             _lexems.Add(new EndSymbol());
         }
 
+        /// <summary>
+        /// Returns the very last lexem that exists in the lexem container.
+        /// </summary>
+        /// <returns>The last lexem. If the container is empty it returns an UnknownChar object.</returns>
         private Lexem GetLastLexem()
         {
             if (_lexems.Count > 0)
@@ -376,6 +367,10 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                 return new UnknownChar(' ');
         }
 
+        /// <summary>
+        /// Removes the last lexem in the container of lexems.
+        /// This method assumes that there is at least 1 lexem in the container. 
+        /// </summary>
         private void RemoveLastLexem()
         {
             _lexems.RemoveAt(_lexems.Count - 1);
@@ -411,94 +406,45 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             }
         }
 
-        private bool IsLBrace(char c)
-        {
-            return c == '(';
-        }
+        private bool IsLBrace(char c) => c == '(';
 
-        private bool IsRBrace(char c)
-        {
-            return c == ')';
-        }
+        private bool IsRBrace(char c) => c == ')'; 
 
-        private bool IsFieldSeparator(char c)
-        {
-            return c == ',';
-        }
+        private bool IsFieldSeparator(char c) => c == ',';
 
-        private bool IsBracket(char c)
-        {
-            return c == '[' || c == ']';
-        }
+        private bool IsBracket(char c) => c == '[' || c == ']';
 
-        private bool IsLBracket(char c)
-        {
-            return c == '[';
-        }
+        private bool IsLBracket(char c) => c == '[';
 
-        private bool IsRBracket(char c)
-        {
-            return c == ']';
-        }
+        private bool IsRBracket(char c) => c == ']';
 
-        private bool IsLCurly(char c)
-        {
-            return c == '{';
-        }
-        private bool IsRCurly(char c)
-        {
-            return c == '}';
-        }
+        private bool IsLCurly(char c) => c == '{';
+        private bool IsRCurly(char c) => c == '}';
+        
+        private bool IsWhitespace(char c) => c == ' ' || c == '\t' || c == '\n' || c == '\r';
 
-        private bool IsWhitespace(char c)
-        {
-            return c == ' ' || c == '\t' || c == '\n' || c == '\r';
-        }
+        private bool IsStringDelimiter(char c) => c == '\'';
+        
+        private bool IsDoubleQuoteStringDelimiter(char c) => c == '"';
+        
+        private bool IsAlpha(char c) => char.IsLetter(c);
 
-        private bool IsStringDelimiter(char c)
-        {
-            return c == '\'';
-        }
+        private bool IsNumber(char c) => char.IsNumber(c); 
 
-        private bool IsDoubleQuoteStringDelimiter(char c)
-        {
-            return c == '"';
-        }
+        private bool IsUnderscore(char c) => c == '_';
 
-        private bool IsAlpha(char c)
-        {
-            return char.IsLetter(c);
-        }
+        private bool IsAtSymbol(char c) => c == '@'; 
 
-        private bool IsNumber(char c)
-        {
-            return char.IsNumber(c);
-        }
+        private bool IsHashSymbol(char c) => c == '@';
+        
+        private bool IsDollarSymbol(char c) => c == '$';
 
-        private bool IsUnderbrace(char c)
-        {
-            return c == '_';
-        }
+        private bool IsSemicolon(char c) => c == ';';
+        private bool IsColon(char c) => c == ':';
 
-        private bool IsAtSymbol(char c)
-        {
-            return c == '@';
-        }
+        private bool IsDoubleQuote(char c) => c == '"';
 
-        private bool IsHashSymbol(char c)
-        { 
-            return c == '#';
-        }
-
-        private bool IsDollarSymbol(char c)
-        {
-            return c == '$';
-        }
-
-        private bool IsKeyword(string s)
-        {
-            return _keywords.Contains(s.ToUpperInvariant());
-        }
+        private bool IsKeyword(string s) => _keywords.Contains(s.ToUpperInvariant());
 
         private bool IsOperator(char c)
         {
@@ -516,7 +462,13 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                 s_upper == "EXITS" || s_upper == "IN" || s_upper == "LIKE" || s_upper == "SOME";
         }
 
-        private bool IsOperator(char c1, char c2)
+        /// <summary>
+        /// Returns if the two provided characters are an operator
+        /// </summary>
+        /// <param name="c1"></param>
+        /// <param name="c2"></param>
+        /// <returns></returns>
+        private bool IsTwoCharOperator(char c1, char c2)
         {
             string s = $"{c1}{c2}";
 
@@ -524,22 +476,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                 | s == ">=" || s == "<=" || s == "<>" || s == "!<" || s == "!=" || s == "!>";
         }
 
-        private bool IsSemicolon(char c)
-        {
-            return c == ';';
-        }
-        private bool IsColon(char c)
-        {
-            return c == ':';
-        }
-
-
-
-
-        private bool IsDoubleQuote(char c)
-        {
-            return c == '"';
-        }
+        
 
         private bool IsInteger(string s)
         {
@@ -567,15 +504,9 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
         /// </summary>
         /// <param name="s"></param>
         /// <returns>true if the string is a label</returns>
-        private bool IsLabel(string s)
-        {
-            return s.Length > 2 && s[s.Length-1] == ':';
-        }
+        private bool IsLabel(string s) => s.Length > 2 && s[s.Length-1] == ':'; 
 
-        private bool IsLineCommentStart(char c)
-        {
-            return c == '-' && IsLastLexemOperator('-') && _buffer.Length == 0;
-        }
+        private bool IsLineCommentStart(char c) => c == '-' && IsLastLexemOperator('-') && _buffer.Length == 0;
 
         private void SkipUntilEndOfLine()
         {
@@ -595,10 +526,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             }
         }
 
-        private bool IsBlockCommentStart(char c)
-        {
-            return c == '*' && IsLastLexemOperator('/');
-        }
+        private bool IsBlockCommentStart(char c) => c == '*' && IsLastLexemOperator('/'); 
 
         private int _blockCommentNestingLevel = 0;
 
@@ -695,6 +623,12 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             }
         }
 
+        /// <summary>
+        /// Checks if the last lexem in the already analyzed list of lexems is 
+        /// an operator like the character provided.
+        /// </summary>
+        /// <param name="operatorSymbol"></param>
+        /// <returns></returns>
         private bool IsLastLexemOperator(char operatorSymbol)
         {
             var lastLexem = GetLastLexem() as OperatorSymbol;
