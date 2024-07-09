@@ -1,0 +1,535 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Parser</name>
+    </assembly>
+    <members>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBrace">
+            <summary>
+            Represents an LBrace "("
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBrace.#ctor">
+            <summary>
+            Constructs an LBrace instance.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBrace.ToString">
+            <summary>
+            
+            </summary>
+            <returns>Returns just LBRACE (</returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBrace">
+            <summary>
+            Represents an RBrace ")"
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBrace.#ctor">
+            <summary>
+            Constructs an RBrace instance.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBrace.ToString">
+            <summary>
+            Returns just RBRACE )
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBracket">
+            <summary>
+            Represents an LBracket "["
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBracket.#ctor">
+            <summary>
+            Constructs an LBracket instance.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LBracket.ToString">
+            <summary>
+            Returns just [ )
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBracket">
+            <summary>
+            Represents an RBracket "]"
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBracket.#ctor">
+            <summary>
+            Constructs an RBracket instance.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.RBracket.ToString">
+            <summary>
+            Returns just ]
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.EndSymbol">
+            <summary>
+            Represents the end of a sequence of lexems.
+            This artificial symbol is added by the Lexer to signal the parser
+            that this is the last symbol in a sequence of lexems/tokens.
+            </summary>
+            <remarks>This is not the same as the END symbol in TSQL </remarks>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.EndSymbol.ToString">
+            <summary>
+            Returns END as representation for END symbol.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FieldSeparator">
+            <summary>
+            Represents a separator for fields (",")
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FieldSeparator.ToString">
+            <summary>
+            Returnd SEPARATOR.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FloatLiteral">
+            <summary>
+            Represents a float literal.
+            </summary>
+            <remarks>
+            There might be additional representations in TSQL that are currently not
+            supported.
+            </remarks>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FloatLiteral.#ctor(System.String)">
+            <summary>
+            Creates an instance of a FloatLiteral.
+            </summary>
+            <param name="s">Initialization value that is parsed as double.</param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FloatLiteral.Number">
+            <summary>
+            Returns the parsed double value from the constructor.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FloatLiteral.Token">
+            <summary>
+            Returns as token the value that was provided to the construcot.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.FloatLiteral.ToString">
+            <summary>
+            Return FLOAT and the value that was provided to the constructor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.IntegerLiteral">
+            <summary>
+            Represents a literal TSQL integer number. The maximum domain for the
+            literal value is limited to the values for the .NET long datatype.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.IntegerLiteral.#ctor(System.String)">
+            <summary>
+            Creates an instance of an IntegerLiteral.
+            </summary>
+            <param name="s">Initialization value that is parsed as long.</param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.IntegerLiteral.Number">
+            <summary>
+            Returns the parsed long value from the constructor.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.IntegerLiteral.ToString">
+            <summary>
+            Return INTEGER and the value that was provided to the constructor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Label">
+            <summary>
+            Represents a label in an TSQL script that can be the target of 
+            a goto statement.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Label.#ctor(System.String)">
+            <summary>
+            Initializes this label with the string value of the label.
+            </summary>
+            <param name="label"></param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Label.Name">
+            <summary>
+            Returns the value of the label that was provided in the constructor. 
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Label.Token">
+            <summary>
+            Returns as token the string value of the label.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Label.ToString">
+            <summary>
+            Returns LABEL and the label value that was provided to the constructor.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Lexem">
+            <summary>
+            Base class for Lexems
+            </summary>
+            <remarks>In the base class is a single Token proeprty that returns 
+            a string representation.
+            </remarks>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Lexem.Token">
+            <summary>
+            If not overwritten returns the value of ToString() for the token.
+            </summary>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier">
+            <summary>
+            Represents an identifier in TSQL.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.#ctor(System.String)">
+            <summary>
+            Creates an instance of a LexerIdentifier.
+            </summary>
+            <param name="name">The name of the identifier.</param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.Name">
+            <summary>
+            Returns the name of the identifier as provided in the constructor.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.Token">
+            <summary>
+            Returns as token the name of the identifier.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.HasAtSymbol">
+            <summary>
+            Checks if the identifier starts with an @ symbol.
+            </summary>
+            <returns>true if the first character is an @ symbol </returns>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.HasDoubleAtSymbols">
+            <summary>
+            Checks if the identifier starts with two @@ symbols.
+            </summary>
+            <returns>true if the first and second characters are @ symbols.</returns>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.LexerIdentifier.ToString">
+            <summary>
+            Returns Id and the identifier value.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol">
+            <summary>
+            Represents a TSQL operator.
+            Among those could be:
+            <list type="table">
+              <listheader>
+                <term>Type</term>
+                <description>Description</description>
+              </listheader>
+              <item>
+                    <term>Multiplicative</term>
+                    <description> * (multiplication),/ (division),% (remainder)</description>
+              </item>
+              <item>
+                    <term>Additive</term>> 
+                    <description>+ (addition),- (subtraction), amp (concatenation)</description>
+              </item>
+              <item>
+                    <term>Comparison</term> 
+                    <description> = (equal),&lt; (less than), > (greater than)</description>
+              </item>
+              <item>
+                    <term>Assignment</term> 
+                    <description>=,+=, -=</description>
+              </item>
+              <item>
+                    <term>Scope resolution</term>
+                    <description>::</description>     
+              </item>
+              <item>
+                    <term>Logical</term> 
+                    <description>AND, OR, NOT</description> 
+              </item>
+              <item>
+                    <term>SQL</term>
+                    <description>IS, IN, LIKE</description> 
+              </item>
+            </list>
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.#ctor(System.String)">
+            <summary>
+            Creates an instance of an OperatorSymbol.
+            </summary>
+            <param name="c">Initializes the operator with this string as symbol.</param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.Symbol">
+            <summary>
+            Returns the symbol that was used at construction time. 
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsMultiplicationSymbol">
+            <summary>
+            Checks if the operator consists of a multiplicative operator, i.e.
+            multiplication *, division /, and remainder %.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsAdditionSymbol">
+            <summary>
+            Checks if the operator consist of an additional operator, i.e.
+            additiona +, subtraction -, concatenation &amp;, ^, pipe |
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsComparisonSymbol">
+            <summary>
+            Returns if the operator consist of a comparision  operator, i.e.
+            equals =, greater than >, less than &lt; greater than >=, ...
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsAssignmentSymbol">
+            <summary>
+            Returns if the operator is an assignment symbol
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsScopeResolutionSymbol">
+            <summary>
+            Returns true if the operator is a scope resolution symbol.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsAnd">
+            <summary>
+            Returns true if the operator is a TSQL AND operator.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsOr">
+            <summary>
+            Returns true if the operator is a TSQL OR operator.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsNot">
+            <summary>
+            Returns true if the operator is a TSQL NOT operator.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsIs">
+            <summary>
+            Returns true if the operator is a TSQL IS operator.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsIn">
+            <summary>
+            Returns true if the operator is a TSQL IN operator.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.IsLike">
+            <summary>
+            Returns true if the operator is a TSQL LIKE operator.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.OperatorSymbol.ToString">
+            <summary>
+            Returns the operator symbol.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Semicolon">
+            <summary>
+            Represents a semicolon (";") that occurred in the SQL script.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Semicolon.#ctor">
+            <summary>
+            Constructs a semicolon lexem.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.Semicolon.ToString">
+            <summary>
+            Returns SEMICOLON.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.StringLiteral">
+            <summary>
+            Represents a TSQL String literal. Distinguishes if unicode format was used.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.StringLiteral.#ctor(System.String,System.Boolean)">
+            <summary>
+            Initializes a TSQL string literator
+            </summary>
+            <param name="s">The string that is used for initialization.</param>
+            <param name="isUnicode">true if the string was prefixed as unicode string.</param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.StringLiteral.Token">
+            <summary>
+            Returns the string either in single quotes for non-unicode strings
+            or in single quotes with an N prefix for unicode strings.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.StringLiteral.ToString">
+            <summary>
+            Returns STRING and the string literator value.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.TSqlKeyword">
+            <summary>
+            Represents a TSQL Keyword.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.TSqlKeyword.#ctor(System.String)">
+            <summary>
+            Initializes a TSqlKeyword lexem instance with the keyword as parameter.
+            </summary>
+            <param name="keyword"></param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.TSqlKeyword.Keyword">
+            <summary>
+            Returns the keyword that used in the constructor for initialization.
+            </summary>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.TSqlKeyword.Token">
+            <summary>
+            Returns as token the keyword that was provided in the constructor.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.TSqlKeyword.ToString">
+            <summary>
+            Returns Keyword and the keyword in uppercase.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.UnknownChar">
+            <summary>
+            Represents a character that was not recognized by the Lexer.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.UnknownChar.#ctor(System.Char)">
+            <summary>
+            Creates an instance of Unknown Char with the not identified character.
+            </summary>
+            <param name="c"></param>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.UnknownChar.Token">
+            <summary>
+            The token is returned as '** Unkwown **' and the character that was used
+            in the constructor.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems.UnknownChar.ToString">
+            <summary>
+            Returns a string starting with ' Unknown: ' and the unidentified character.
+            Afterwards a long list of * is appended.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="T:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer">
+            <summary>
+            Simple lexer class for parsing TSQL
+            </summary>
+            <remarks>
+            <list type="bullet">
+                <item>The lexer is initialized with an input string </item>
+                <item>The Scan function analyzes the input and stores the lexems that can be used by the parser.</item>
+                <item>The supported lexems (keywords and special characters) are created in the static constructor of the class. </item>
+                <item>The analyzed lexems can be found with the <see cref="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.Lexems"/> property.</item>
+            </list>
+            </remarks>
+        </member>
+        <member name="P:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.Lexems">
+            <summary>
+            Returns a list of the lexems that the Lexer found.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.#ctor(System.String)">
+            <summary>
+            Initializes the lexer with an input string
+            </summary>
+            <remarks>
+            Instead of a string an input stream could have been used.
+            String was chosen for simplicity.
+            </remarks>
+            <param name="input">Input string.</param>
+        </member>
+        <member name="F:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer._pos">
+            <summary>
+            Current character position in the _input string.
+            </summary>
+        </member>
+        <member name="F:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer._buffer">
+            <summary>
+            temporary buffer for the current lexems.
+            </summary>
+        </member>
+        <member name="F:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer._bracketCount">
+            <summary>
+            Counts the number of open brackets (TSQL symbol '[') 
+            that were opened in the current lexem. These brackets are used in
+            identifiers. Then whitespace may be used, too.
+            </summary>
+        </member>
+        <member name="F:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer._isUnicode">
+            <summary>
+             
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.Scan">
+            <summary>
+            Scans the input string that was provided in the constructor.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.GetLastLexem">
+            <summary>
+            Returns the very last lexem that exists in the lexem container.
+            </summary>
+            <returns>The last lexem. If the container is empty it returns an UnknownChar object.</returns>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.RemoveLastLexem">
+            <summary>
+            Removes the last lexem in the container of lexems.
+            This method assumes that there is at least 1 lexem in the container. 
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.CompleteLexem">
+            <summary>
+            Complete the current lexem and add it to the _lexems container.
+            This function identifies the type of the lexem and creates the
+            proper type.
+            </summary>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.IsTwoCharOperator(System.Char,System.Char)">
+            <summary>
+            Returns if the two provided characters are an operator
+            </summary>
+            <param name="c1"></param>
+            <param name="c2"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.IsLabel(System.String)">
+            <summary>
+            Returns if the string is a label.
+            A label has a colon (:) as last character.
+            </summary>
+            <param name="s"></param>
+            <returns>true if the string is a label</returns>
+        </member>
+        <member name="M:OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexer.IsLastLexemOperator(System.Char)">
+            <summary>
+            Checks if the last lexem in the already analyzed list of lexems is 
+            an operator like the character provided.
+            </summary>
+            <param name="operatorSymbol"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
