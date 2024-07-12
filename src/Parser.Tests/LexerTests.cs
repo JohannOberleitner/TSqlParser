@@ -3,7 +3,7 @@ using NUnit.Framework.Legacy;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems;
 
-namespace Parser.Tests;
+namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Tests;
 
 public class Tests
 {    [SetUp]
