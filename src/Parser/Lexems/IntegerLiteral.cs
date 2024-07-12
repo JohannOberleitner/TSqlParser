@@ -7,7 +7,7 @@
     public class IntegerLiteral : Lexem
     {
         private readonly string _string;
-        private readonly long? _value;
+        private readonly long _value;
 
         /// <summary>
         /// Creates an instance of an IntegerLiteral.
@@ -17,15 +17,15 @@
         {
             _string = s;
             if (long.TryParse(s, out long l))
-            {
                 _value = l;
-            }
+            else
+                throw new ArgumentException($"Cannot parse Integer Literal {s}");
         }
 
         /// <summary>
         /// Returns the parsed long value from the constructor.
         /// </summary>
-        public long? Number => _value;
+        public long Number => _value;
 
         /// <summary>
         /// Return INTEGER and the value that was provided to the constructor.

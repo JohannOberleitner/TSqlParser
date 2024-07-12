@@ -61,24 +61,24 @@
         /// multiplication *, division /, and remainder %.
         /// </summary>
         //public bool IsMultiplicationSymbol => _symbol == "*" || _symbol == "/" || _symbol == "%";
-        public bool IsMultiplicationSymbol => _symbol switch { "*" or "/" or "%" => true, _ => false };
+        public override bool IsMultiplicationSymbol => _symbol switch { "*" or "/" or "%" => true, _ => false };
 
         /// <summary>
         /// Checks if the operator consist of an additional operator, i.e.
         /// additiona +, subtraction -, concatenation &amp;, ^, pipe |
         /// </summary>
-        public bool IsAdditionSymbol => _symbol == "+" || _symbol == "-" || _symbol == "&" || _symbol == "^" || _symbol == "|" || _symbol == "&";
+        public override bool IsAdditionSymbol => _symbol == "+" || _symbol == "-" || _symbol == "&" || _symbol == "^" || _symbol == "|" || _symbol == "&";
 
         /// <summary>
         /// Returns if the operator consist of a comparision  operator, i.e.
         /// equals =, greater than >, less than &lt; greater than >=, ...
         /// </summary>
-        public bool IsComparisonSymbol => _symbol == "=" || _symbol == ">" || _symbol == "<" || _symbol == ">=" || _symbol == "<=" || _symbol == "<>" || _symbol == "!>" || _symbol == "!<" || _symbol == "!=";
+        public override bool IsComparisonSymbol => _symbol == "=" || _symbol == ">" || _symbol == "<" || _symbol == ">=" || _symbol == "<=" || _symbol == "<>" || _symbol == "!>" || _symbol == "!<" || _symbol == "!=";
 
         /// <summary>
         /// Returns if the operator is an assignment symbol
         /// </summary>
-        public bool IsAssignmentSymbol => _symbol == "=" || _symbol == "+=" || _symbol == "-=" || _symbol == "*=" || _symbol == "/=" || _symbol == "%=" || _symbol == "&=" || _symbol == "|=" || _symbol == "^=";
+        public override bool IsAssignmentSymbol => _symbol == "=" || _symbol == "+=" || _symbol == "-=" || _symbol == "*=" || _symbol == "/=" || _symbol == "%=" || _symbol == "&=" || _symbol == "|=" || _symbol == "^=";
 
         /// <summary>
         /// Returns true if the operator is a scope resolution symbol.
@@ -109,6 +109,15 @@
         /// Returns true if the operator is a TSQL LIKE operator.
         /// </summary>
         public bool IsLike => _symbol.Equals("LIKE", StringComparison.OrdinalIgnoreCase);
+
+        /// <summary>
+        /// Checks if this this lexem is an operation symbol and 
+        /// if the symbol equals the contained operatino symbol.
+        /// </summary>
+        /// <param name="s"></param>
+        /// <returns></returns>
+        public override bool CheckWithOperationSymbol(string s)
+            => _symbol.Equals(s, StringComparison.OrdinalIgnoreCase);
 
         /// <summary>
         /// Returns the operator symbol.
