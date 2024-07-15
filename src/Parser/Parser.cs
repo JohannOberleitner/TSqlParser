@@ -1170,7 +1170,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             var next = _lexems[_pos];
             while (!(next is RBrace ||
                      next.TokenEquals("INTO", "OUTPUT", "OPTION") ||
-                     next.KeywordEquals("CASE") ||
+                     (next is TSqlKeyword && !next.KeywordEquals("CASE")) ||
                      next is Semicolon))
             {
                 var argument = CollectExpression();
@@ -1184,7 +1184,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                 }
                 if (next is RBrace ||
                     next.TokenEquals("INTO", "OUTPUT", "OPTION") ||
-                    next.KeywordEquals("CASE") ||
+                    (next is TSqlKeyword && !next.KeywordEquals("CASE")) ||
                     next is Semicolon)
                 {
                     continue;
@@ -2691,7 +2691,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             ParseTableHints();
 
             ExpectStatement("SET");
-            AdvancedLexemPointer();
+            //AdvancedLexemPointer();
 
             var argumentList = ParseArgumentList();
             next = _lexems[_pos];

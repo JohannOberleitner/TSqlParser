@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser.Tests", "Parser.Tests\Parser.Tests.csproj", "{D3360155-9E8B-4780-83AF-0BAEC88873E4}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{91DEEFD3-936D-46E7-A979-775593D83099}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TSQLDependencyDetector", "Tools\TSQLDependencyDetector\TSQLDependencyDetector.csproj", "{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +28,12 @@ Global
 		{D3360155-9E8B-4780-83AF-0BAEC88873E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D3360155-9E8B-4780-83AF-0BAEC88873E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D3360155-9E8B-4780-83AF-0BAEC88873E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{5737A4AB-06EC-42BD-A28D-37C5EB7EEC65} = {91DEEFD3-936D-46E7-A979-775593D83099}
 	EndGlobalSection
 EndGlobal
