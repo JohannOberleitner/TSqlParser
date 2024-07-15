@@ -4,13 +4,15 @@
   // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
   "version": "0.2.0",
   "configurations": [
+
     
     {
       "name": "TSQLDetector .NET Core launch (command)",
       "type": "coreclr",
       "request": "launch",
       "program": "${workspaceFolder}/src/Tools/TSQLDependencyDetector/bin/Debug/net8.0/TSQLDependencyDetector.dll",
-      "args": ["src/Tools/TSQLDependencyDetector/test.sql"]
+      "args": ["src/Tools/TSQLDependencyDetector/test.sql"],
+      "preLaunchTask": "build"
     }
   ]
 }
