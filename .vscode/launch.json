@@ -10,8 +10,7 @@
       "type": "coreclr",
       "request": "launch",
       "program": "${workspaceFolder}/src/Tools/TSQLDependencyDetector/bin/Debug/net8.0/TSQLDependencyDetector.dll",
-      "args": ["src/Tools/TSQLDependencyDetector/test.sql"],
-      "preLaunchTask": "dotnet: build"
+      "args": ["src/Tools/TSQLDependencyDetector/test.sql"]
     }
   ]
 }

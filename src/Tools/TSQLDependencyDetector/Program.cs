@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using OberleitnerTech.PortabilityAdvisor.TSqlParser.DependentObjectCollector;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements;
@@ -20,6 +21,8 @@ public class Program
       var statements = ParseFromFile(args[0]);
       Console.WriteLine($"Statement Count: {statements.Count()}");
       PrintStatements(statements);
+      Console.WriteLine("-------------");
+      PrintDependencies(statements);
     }
   }
 
@@ -59,5 +62,29 @@ public class Program
   {
     foreach(var statement in statements)
       Console.WriteLine(statement);
+  }
+
+  private static void PrintDependencies(IEnumerable<Statement> statements)
+  {
+    var collector = new SimpleCollector(statements.ToList());
+    collector.Collect();
+    Console.WriteLine("=====================");
+    Console.WriteLine("  Tables");
+    foreach(var id in collector.TableUsage.Keys)
+    {
+        Console.WriteLine($"{id} ({collector.TableUsage[id].Count}x)");
+    }
+    Console.WriteLine("=====================");
+    Console.WriteLine("  Exec Calls of Stored Procedures");
+    foreach(var id in collector.StoredProcUsage.Keys)
+    {
+        Console.WriteLine($"{id} ({collector.StoredProcUsage[id].Count}x)");
+    }
+    Console.WriteLine("=====================");
+    Console.WriteLine("  Create Calls of Stored Procedures");
+    foreach(var id in collector.StoredProcCreate.Keys)
+    {
+        Console.WriteLine($"{id} ({collector.StoredProcCreate[id].Count}x)");
+    }
   }
 }

@@ -5,6 +5,11 @@ using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements.FromClause
 
 namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Visitor
 {
+    /// <summary>
+    /// Implements base logic for a visitor. 
+    /// Follows already sequential statements, in block mode, etc.
+    /// This visitor does not collect any data.
+    /// </summary>
     public abstract class BaseVisitor : IVisitor, IExpressionVisitor, ITableSourceVisitor, IJoinVisitor
     {
         public virtual void Visit(IList<Statement> statements)
@@ -321,47 +326,47 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Visitor
             argument.Expression.Accept(this);
         }
 
-        public void Visit(SimpleTable table)
+        public virtual void Visit(SimpleTable table)
         {
         }
 
-        public void Visit(TableJoin tableJoin)
+        public virtual void Visit(TableJoin tableJoin)
         {
             tableJoin.First.Accept(this);
             foreach (var join in tableJoin.Joins)
                 join.Accept(this);
         }
 
-        public void Visit(SubTableSource subTable)
+        public virtual void Visit(SubTableSource subTable)
         {
             subTable.Inner.Accept(this);
         }
 
-        public void Visit(DerivedTable derivedTable)
+        public virtual void Visit(DerivedTable derivedTable)
         {
             derivedTable.Query.Accept(this);
         }
 
-        public void Visit(OpenXMLTable openXMLTable)
+        public virtual void Visit(OpenXMLTable openXMLTable)
         {
         }
 
-        public void Visit(InnerJoin innerJoin)
+        public virtual void Visit(InnerJoin innerJoin)
         {
             innerJoin.JoinSource.Accept(this);
         }
 
-        public void Visit(OuterJoin outerJoin)
+        public virtual void Visit(OuterJoin outerJoin)
         {
             outerJoin.JoinSource.Accept(this);
         }
 
-        public void Visit(CrossApply crossApply)
+        public virtual void Visit(CrossApply crossApply)
         {
             crossApply.Right.Accept(this);
         }
 
-        public void Visit(CrossJoin crossJoin)
+        public virtual void Visit(CrossJoin crossJoin)
         {
             crossJoin.Right.Accept(this);
         }
