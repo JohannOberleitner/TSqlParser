@@ -47,6 +47,8 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements
             visitor.Visit(this);
         }
 
+        public IList<ColumnDescriptor> ColumnExpressionList => _columnExpressionList;
+
         public FromClause? FromClause => _fromClause;
         public override string ToString()
         {

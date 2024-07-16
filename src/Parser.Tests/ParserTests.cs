@@ -45,6 +45,10 @@ public class ParserTests
               select x,y from dbo.table2
         ";
 
+        string _code103 = @"
+              select myFunc(x),y from dbo.myTable
+        ";
+
     private Lexer? _lexer;
     private Parser? _parser;
 
@@ -99,6 +103,20 @@ public class ParserTests
     public void Test_Parser_102()
     {
         _lexer = new Lexer(_code102);
+        _lexer.Scan();
+        _parser = new Parser(_lexer.Lexems);
+        _parser.Parse();
+
+        foreach (var s in _parser.Statements)
+          System.Console.Out.WriteLine(s);
+
+        Assert.That(_parser.Statements.Count == 1);
+    }
+
+    [Test]
+    public void Test_Parser_103()
+    {
+        _lexer = new Lexer(_code103);
         _lexer.Scan();
         _parser = new Parser(_lexer.Lexems);
         _parser.Parse();

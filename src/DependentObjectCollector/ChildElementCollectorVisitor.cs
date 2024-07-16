@@ -22,13 +22,15 @@ public class ChildElementCollectorVisitor : BaseVisitor
 
     public override void Visit(QueryStatement queryStatement)
     {
+        base.Visit(queryStatement);
+
         if (queryStatement.FromClause == null)
           return;
 
-        foreach(var table in queryStatement.FromClause.TableSources)
+        /* (var table in queryStatement.FromClause.TableSources)
         {
             table.Accept(this);
-        }
+        }*/
         
     }
 
@@ -52,5 +54,21 @@ public class ChildElementCollectorVisitor : BaseVisitor
     {
         _storage.AddStoredProcCreateUsage(statement.Identifier.Name, "todo");
         base.Visit(statement);
+    }
+
+    public override void Visit(FunctionCallExpression expression)
+    {
+        base.Visit(expression);
+        _storage.AddFunctionCall(expression.Identifier.Name, expression);
+    }
+
+    public override void Visit(OuterJoin outerJoin)
+    {
+        outerJoin.JoinCondition.Accept(this);
+    }   
+
+    public override void Visit(InnerJoin outerJoin)
+    {
+        outerJoin.JoinCondition.Accept(this);
     }
 }

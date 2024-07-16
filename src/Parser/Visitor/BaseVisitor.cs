@@ -162,6 +162,9 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Visitor
 
         public virtual void Visit(QueryStatement statement)
         {
+            foreach (var arg in statement.ColumnExpressionList)
+                arg.Expression.Accept(this);
+
             if (statement.FromClause != null)
             {
                 foreach (var tableSource in statement.FromClause.TableSources)

@@ -17,6 +17,8 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Expressions
             _argumentListRepresentation = MakeArgumentListRepresentation();
         }
 
+        public Identifier Identifier => _identifier;
+
         public IList<ArgumentExpression> ArgumentList => _argumentList;
 
         public override void Accept(IExpressionVisitor visitor)

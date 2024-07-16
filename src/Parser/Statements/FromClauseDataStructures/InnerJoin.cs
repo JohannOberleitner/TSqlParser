@@ -24,6 +24,9 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements.FromCl
 
         public TableSource JoinSource => _joinSource;
 
+        public Expression JoinCondition => _joinCondition;
+
+
         public override string ToString()
         {
             var sb = new StringBuilder();

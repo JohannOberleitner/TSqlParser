@@ -12,6 +12,8 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements.Select
             _expression = expression;
             _alias = alias;
         }
+
+        public Expression Expression => _expression;
         public override string ToString()
         {
             if (_alias != null)

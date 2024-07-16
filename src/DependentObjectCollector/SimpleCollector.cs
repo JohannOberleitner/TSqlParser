@@ -11,7 +11,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.DependentObjectCollector
 /// The collector does not apply the search recursively to the
 /// found elements.
 /// </summary>
-public class SimpleCollector: ICollectorVisitorStorage
+public class SimpleCollector : ICollectorVisitorStorage
 {
     private readonly IList<Statement> _statements;
 
@@ -24,6 +24,9 @@ public class SimpleCollector: ICollectorVisitorStorage
 
     private readonly Dictionary<string, List<object>> _callStoredProc = new();
     private readonly Dictionary<string, List<object>> _createStoredProc = new();
+
+    private readonly Dictionary<string, List<object>> _functionCalls = new();
+
 
     public void AddTableUsage(string tableName, object user)
     {
@@ -46,6 +49,13 @@ public class SimpleCollector: ICollectorVisitorStorage
         _createStoredProc[storedProcName].Add(user);
     }
 
+    public void AddFunctionCall(string functionCallName, object expression)
+    {
+        if (!_functionCalls.ContainsKey(functionCallName))
+            _functionCalls[functionCallName] = new();
+        _functionCalls[functionCallName].Add(expression);
+    }
+
     public void Collect()
     {
         var visitor = new ChildElementCollectorVisitor(this);
@@ -56,4 +66,6 @@ public class SimpleCollector: ICollectorVisitorStorage
     public IDictionary<string, List<object>> StoredProcUsage => _callStoredProc;
 
     public IDictionary<string, List<object>> StoredProcCreate => _createStoredProc;
+
+    public IDictionary<string, List<object>> FunctionCalls => _functionCalls;
 }

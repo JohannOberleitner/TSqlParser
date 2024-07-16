@@ -86,5 +86,11 @@ public class Program
     {
         Console.WriteLine($"{id} ({collector.StoredProcCreate[id].Count}x)");
     }
+    Console.WriteLine("=====================");
+    Console.WriteLine("  Called Functions");
+    foreach(var id in collector.FunctionCalls.Keys)
+    {
+        Console.WriteLine($"{id} ({collector.FunctionCalls[id].Count}x)");
+    }
   }
 }
