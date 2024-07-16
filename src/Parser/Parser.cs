@@ -140,6 +140,8 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             _tableHintsNotRequiringWith.Add("XLOCK");
             _tableHintsNotRequiringWith.Add("SNAPSHOT");
             _tableHintsNotRequiringWith.Add("NOEXPAND");
+            // TODO: expired Table Hints
+            _tableHintsNotRequiringWith.Add("HOLDLOCK");
         }
 
         private delegate void TCreateStatementAction();

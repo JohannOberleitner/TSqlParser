@@ -40,6 +40,11 @@ public class ParserTests
 	            where 1=1
         ";
 
+        string _code102 = @"
+              insert into dbo.table1(a,b) 	             
+              select x,y from dbo.table2
+        ";
+
     private Lexer? _lexer;
     private Parser? _parser;
 
@@ -80,6 +85,20 @@ public class ParserTests
     public void Test_Parser_79()
     {
         _lexer = new Lexer(_code79);
+        _lexer.Scan();
+        _parser = new Parser(_lexer.Lexems);
+        _parser.Parse();
+
+        foreach (var s in _parser.Statements)
+          System.Console.Out.WriteLine(s);
+
+        Assert.That(_parser.Statements.Count == 1);
+    }
+
+    [Test]
+    public void Test_Parser_102()
+    {
+        _lexer = new Lexer(_code102);
         _lexer.Scan();
         _parser = new Parser(_lexer.Lexems);
         _parser.Parse();

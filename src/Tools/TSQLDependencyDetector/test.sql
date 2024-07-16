@@ -18,4 +18,8 @@ EXEC dbo.myStoredProc 3
 
 SELECT * FROM tableX
 
+insert into dbo.table4(a,b) 	             
+select x,y from dbo.table5
+
+
 

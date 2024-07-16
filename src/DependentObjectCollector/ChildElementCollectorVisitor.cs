@@ -40,6 +40,7 @@ public class ChildElementCollectorVisitor : BaseVisitor
     public override void Visit(InsertStatement statement)
     {
         _storage.AddTableUsage(statement.TableName.Name, "todo");
+        statement.QueryStatement?.Accept(this);
     }
 
     public override void Visit(CallStoredProcedureStatement statement)
