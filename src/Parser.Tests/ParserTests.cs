@@ -49,6 +49,23 @@ public class ParserTests
               select myFunc(x),y from dbo.myTable
         ";
 
+        string _code104 = @"
+              create procedure MyStoredProc
+              (
+                @fid INT NOT NULL,
+                @atext VARCHAR(20)
+              )
+              AS
+              BEGIN
+                SELECT 
+                  d
+                FROM 
+                  MyTable
+                WHERE
+                  id = fid
+              END
+        ";
+
     private Lexer? _lexer;
     private Parser? _parser;
 
@@ -117,6 +134,20 @@ public class ParserTests
     public void Test_Parser_103()
     {
         _lexer = new Lexer(_code103);
+        _lexer.Scan();
+        _parser = new Parser(_lexer.Lexems);
+        _parser.Parse();
+
+        foreach (var s in _parser.Statements)
+          System.Console.Out.WriteLine(s);
+
+        Assert.That(_parser.Statements.Count == 1);
+    }
+
+    [Test]
+    public void Test_Parser_104()
+    {
+        _lexer = new Lexer(_code104);
         _lexer.Scan();
         _parser = new Parser(_lexer.Lexems);
         _parser.Parse();

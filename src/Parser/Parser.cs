@@ -3117,6 +3117,31 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
                         ExpectToken("UNKNOWN");
                     }
                 }
+                else if (CheckToken("USE"))
+                {
+                    ExpectToken("USE");
+                    ExpectToken("HINT");
+                    next = _lexems[_pos];
+                    if (next is LBrace)
+                    {
+                        AdvancedLexemPointer();
+                        while (next is not RBrace)
+                        {
+                            CollectExpression();
+                            next = _lexems[_pos];
+                            if (next is FieldSeparator)
+                            {
+                                AdvancedLexemPointer();
+                                next = _lexems[_pos];
+                            }
+                        }
+                        AdvancedLexemPointer();
+                    }
+                    else
+                    {
+                        ExpectToken("UNKNOWN");
+                    }
+                }
                 else
                 {
                     CollectExpression();
@@ -4732,8 +4757,26 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
         {
             var identifier = CollectIdentifier();
             var parameterType = CollectDataType();
-            Expression? defaultValueExpression = null;
+            var nullValueType = ParameterDeclarationNullValue.None;
+
             var next = _lexems[_pos];
+            bool isNot = false;
+            if (next.CheckWithOperationSymbol("NOT"))
+            {
+                isNot = true;
+                AdvancedLexemPointer();
+                next = _lexems[_pos];
+            }
+            if (next.TokenEquals("NULL"))
+            {
+                nullValueType = isNot ?
+                    ParameterDeclarationNullValue.NotNull :
+                    ParameterDeclarationNullValue.Null;
+                AdvancedLexemPointer();
+            }
+
+            Expression? defaultValueExpression = null;
+            next = _lexems[_pos];
             if (next is OperatorSymbol && ((OperatorSymbol)next).Symbol == "=")
             {
                 AdvancedLexemPointer();
@@ -4765,7 +4808,7 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser
             }
 
 
-            return new ParameterDeclaration(identifier, parameterType, additionalFlags, defaultValueExpression);
+            return new ParameterDeclaration(identifier, parameterType, nullValueType, additionalFlags, defaultValueExpression);
         }
 
         public static bool IsSetOperator(TSqlKeyword keyword)

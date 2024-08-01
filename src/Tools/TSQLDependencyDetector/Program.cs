@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Security.Permissions;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.DependentObjectCollector;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser;
 using OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Lexems;
@@ -11,22 +12,35 @@ public class Program
   static void Main(string[] args)
   {
     Console.WriteLine("TSQL Dependency Detector");
+    string code = "";
+
     if (args.Length == 0)
     {
-      PrintUsage();
-      return;
+      code = ReadFromInput();;
+    }
+    else if (args.Length == 2 && args[0].Equals("-f"))
+    {
+      code = ReadFromFile(args[2]);
     }
     else
     {
-      var statements = ParseFromFile(args[0]);
-      Console.WriteLine($"Statement Count: {statements.Count()}");
-      PrintStatements(statements);
-      Console.WriteLine("-------------");
-      PrintDependencies(statements);
+      PrintUsage(); 
+      return;
     }
+
+    IEnumerable<Statement> statements = Parse(code);
+    Console.WriteLine($"Statement Count: {statements.Count()}");
+    PrintStatements(statements);
+    Console.WriteLine("-------------");
+    PrintDependencies(statements);
   }
 
-  private static IEnumerable<Statement> ParseFromFile(string filename)
+  private static string ReadFromInput()
+  {
+    return System.Console.In.ReadToEnd();
+  }
+
+  private static string ReadFromFile(string filename)
   {
     var x = Environment.CurrentDirectory;
 
@@ -34,7 +48,7 @@ public class Program
       throw new ArgumentException($"File not found: {filename}");
 
     var code = File.ReadAllText(filename);
-    return Parse(code);
+    return code;
   }
 
   private static IEnumerable<Statement> Parse(string tsqlScriptCode)
@@ -52,8 +66,9 @@ public class Program
     Console.WriteLine("  A tool to find dependencies in TSQL queries");
     Console.WriteLine();
     Console.WriteLine("Usage:");  
-    Console.WriteLine("TSQLDependencyDetector.exe filename");
-    Console.WriteLine("  filename is a file that includes TSQL code");
+    Console.WriteLine("TSQLDependencyDetector.exe [-F filename|");
+    Console.WriteLine("  -F filename is a file that includes TSQL code");
+    Console.WriteLine("  If no filename is given the contents can be fed with pipe into this tool.");
     Console.WriteLine();
     Console.WriteLine("Output: Dependencies in formatted form");
   }

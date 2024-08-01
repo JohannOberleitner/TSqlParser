@@ -5,6 +5,13 @@ using System.Text;
 
 namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements
 {
+    public enum ParameterDeclarationNullValue
+    {
+        None,
+        Null = 1,
+        NotNull = 2
+    }
+
     /// <summary>
     /// Represents a parameter declaration for a stored procedure.
     /// </summary>
@@ -12,15 +19,18 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements
     {
         private readonly Identifier _identifier;
         private readonly SqlDataType _parameterType;
+
+        private readonly ParameterDeclarationNullValue _nullValue;
         private readonly IList<Identifier> _additionalFlags;
         private readonly Expression? _defaultValue;
 
         private readonly string _additionalFlagsRepresentation;
 
-        public ParameterDeclaration(Identifier identifier, SqlDataType parameterType, IList<Identifier> additionalFlags, Expression? defaultValue)
+        public ParameterDeclaration(Identifier identifier, SqlDataType parameterType, ParameterDeclarationNullValue nullValue, IList<Identifier> additionalFlags, Expression? defaultValue)
         {
             _identifier = identifier;
             _parameterType = parameterType;
+            _nullValue = nullValue;
             _additionalFlags = additionalFlags;
             _defaultValue = defaultValue;
             _additionalFlagsRepresentation = MakeAdditionalFlagsRepresentation();
@@ -41,12 +51,30 @@ namespace OberleitnerTech.PortabilityAdvisor.TSqlParser.Parser.Statements
             return sb.ToString();
         }
 
+        private string NullValue
+        {
+            get
+            {
+                switch (_nullValue)
+                {
+                    case ParameterDeclarationNullValue.None:
+                        return "";
+                    case ParameterDeclarationNullValue.Null:
+                        return " NULL";
+                    case ParameterDeclarationNullValue.NotNull:
+                        return " NOT NULL";
+                    default:
+                        throw new NotImplementedException($"Invalid NullValue Type:{_nullValue}");
+                }
+            }
+        }
+
         public override string ToString()
         {
             if (_defaultValue == null)
-                return $"{_identifier.Name} {_parameterType} {_additionalFlagsRepresentation}";
+                return $"{_identifier.Name} {_parameterType}{NullValue}{_additionalFlagsRepresentation}";
             else
-                return $"{_identifier.Name} {_parameterType} {_additionalFlagsRepresentation} = {_defaultValue}";
+                return $"{_identifier.Name} {_parameterType}{NullValue}{_additionalFlagsRepresentation} = {_defaultValue}";
         }
     }
 }
